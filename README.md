@@ -1,7 +1,7 @@
 # 👋 Olá, eu sou Luan Morais 
 
 🎓 Sou formado em **Física** e atualmente sou estudante de **Análise e Desenvolvimento de Sistemas**
-📊 Interesse em **Ciência de Dados, Machine Learning e Sistemas Inteligentes**  
+📊 Interesses em **Ciência de Dados, Machine Learning e Sistemas Inteligentes**  
 🚀 Desenvolvendo projetos em **Python, Java e SQL**  
 
 # Projetos-Graduacao
