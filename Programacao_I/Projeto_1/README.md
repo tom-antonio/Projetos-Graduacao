@@ -1,18 +1,42 @@
-## Getting Started
+# Projeto de Gerenciamento de Vendas
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Este projeto em Java simula um sistema simples de gerenciamento de vendas e produtos.
 
-## Folder Structure
+## Estrutura do Projeto
 
-The workspace contains two folders by default, where:
+- `src/`: Contém os arquivos fonte Java.
+  - [`App.java`](src/App.java): Classe principal que executa o programa.
+  - [`Produto.java`](src/Produto.java): Classe que representa um produto.
+  - [`Venda.java`](src/Venda.java): Classe que representa uma venda.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Funcionalidades
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- Cadastro de produtos com nome, marca, preço e quantidade.
+- Cadastro de vendas com número, produto e data.
+- Impressão dos dados da venda no console.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Como Executar
 
-## Dependency Management
+1. Compile os arquivos Java:
+   ```sh
+   javac -d bin src/*.java
+   ```
+2. Execute o programa:
+   ```sh
+   java -cp bin App
+   ```
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Exemplo de Saída
+
+```
+Número da Venda: 123456
+Produto: Extrato Tomate
+Marca: Elefante
+Preço: 3.99
+Quantidade: 10
+Data da Venda: 01/07/2024
+```
+
+## Autor
+
+Projeto desenvolvido para a disciplina de Programação I.
