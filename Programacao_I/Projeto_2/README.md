@@ -1,18 +1,56 @@
-## Getting Started
+# Projeto Cadastro de Veículos e Fabricantes
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Este projeto em Java permite o cadastro e exibição de informações de veículos e seus respectivos fabricantes.
 
-## Folder Structure
+## Estrutura do Projeto
 
-The workspace contains two folders by default, where:
+- `src/`: Contém os arquivos fonte Java.
+  - [`App.java`](src/App.java): Classe principal que executa o programa.
+  - [`Fabricante.java`](src/Fabricante.java): Classe que representa um fabricante de veículos.
+  - [`Veiculo.java`](src/Veiculo.java): Classe que representa um veículo.
+- `bin/`: Pasta de saída dos arquivos compilados.
+- `lib/`: Pasta para dependências externas (não utilizada neste projeto).
+- `.vscode/`: Configurações do Visual Studio Code.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Como Executar
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+1. Compile os arquivos Java:
+   ```sh
+   javac -d bin src/*.java
+   ```
+2. Execute o programa:
+   ```sh
+   java -cp bin App
+   ```
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Funcionalidades
 
-## Dependency Management
+- Cadastro de fabricantes com nome, CNPJ e cidade.
+- Cadastro de veículos com placa, nome, ano, modelo e fabricante.
+- Impressão dos dados dos veículos e seus fabricantes no console.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Exemplo de Saída
+
+```
+###  Dados do Veículo  ###
+Placa: NFH-2314
+Nome: Corsa
+Ano: 2006
+Modelo: Duas portas
+Nome: Chevrolet
+CNPJ: 12.720.369/0001-72
+Cidade: São Paulo
+
+###  Dados do Veículo  ###
+Placa: NGK-5948
+Nome: S10
+Ano: 2012
+Modelo: Rodeio
+Nome: Chevrolet
+CNPJ: 12.720.369/0001-72
+Cidade: São Paulo
+```
+
+## Autor
+
+Projeto desenvolvido para a disciplina de Programação I.
