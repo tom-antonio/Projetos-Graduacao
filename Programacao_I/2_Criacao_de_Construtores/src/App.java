@@ -1,11 +1,10 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        Fabricante f1 = new Fabricante();
-        f1.setId(01);
-        f1.setNome("Chevrolet");
-        f1.setCnpj("12.720.369/0001-72");
-        f1.setCidade("São Paulo");
-
+        Fabricante f1 = new Fabricante(01, 
+        "Chevrolet",
+        "12.720.369/0001-72", 
+        "São Paulo");
+    
         Veiculo v1 = new Veiculo();
         v1.setId(01);
         v1.setPlaca("NFH-2314");

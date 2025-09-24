@@ -28,5 +28,18 @@ public class Fabricante {
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
+    public Fabricante() {
+    }
+    public Fabricante(int id, String nome, String cnpj, String cidade) {
+        this.id = id;
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.cidade = cidade;
+    }
+
+//Construtor serve para inicializar os atributos da classe, construir o objeto.
+//Se tiver um construutor com parametros, o construtor padrão (sem parâmetros) necessariamente é obrigatório existir.
+
+
     
 }
