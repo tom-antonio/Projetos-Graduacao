@@ -1,0 +1,6 @@
+01;Luan;Jatai
+02;Lucas;Rio Verde
+03;Flávio;Mineiros
+04;André;Caiapônia
+05;Pedro Augusto;Iporá
+06;Marilia;Araçatuba
