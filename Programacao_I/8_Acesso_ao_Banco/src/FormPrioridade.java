@@ -69,11 +69,50 @@ public class FormPrioridade extends JFrame {
         btnExcluir = new JButton("Excluir");
         btnPesquisar = new JButton("Pesquisar");
 
-        // Adicionar listeners aos botões
+        // Método salvar ação do botão Salvar
         btnSalvar.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                prioridade.salvarPrioridade();
+                try {
+                    String descricao = txtDescricao.getText().trim();
+
+                    if (descricao.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormPrioridade.this,
+                                "Descrição não pode ser vazia.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    if (prioridade == null) {
+                        prioridade = new Prioridade();
+                    }
+
+                    prioridade.setDescricao(descricao);
+
+                    boolean ok = prioridade.salvarPrioridade();
+                    if (ok) {
+                        JOptionPane.showMessageDialog(FormPrioridade.this,
+                                "Prioridade salva com sucesso!",
+                                "Sucesso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        // Exibe o ID gerado pelo banco
+                        txtId.setText(String.valueOf(prioridade.getId()));
+                        txtDescricao.setText("");
+                        txtDescricao.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(FormPrioridade.this,
+                                "Não foi possível salvar a prioridade. Verifique o log/console.",
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(FormPrioridade.this,
+                            "Erro ao salvar: " + ex.getMessage(),
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
