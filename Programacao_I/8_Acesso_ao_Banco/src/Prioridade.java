@@ -25,5 +25,18 @@ public class Prioridade {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public void salvarPrioridade() {
+        System.out.println("Salvando prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    }
+    public void alterarPrioridade() {
+        System.out.println("Alterando prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    }
+    public void excluirPrioridade() {
+        System.out.println("Excluindo prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    }
+    public void pesquisarPrioridade() {
+        System.out.println("Pesquisando prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    }
     
 }
