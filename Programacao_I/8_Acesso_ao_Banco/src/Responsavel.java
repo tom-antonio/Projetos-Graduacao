@@ -1,3 +1,10 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Responsavel {
     private int id;
     private String nome;
@@ -26,8 +33,53 @@ public class Responsavel {
         this.nome = nome;
     }
 
-    public void salvarResponsavel() {
-        System.out.println("Salvando responsavel: ID=" + this.id + ", Descrição=" + this.nome);
+        // Lista todas as prioridades cadastradas no banco
+    public static List<Responsavel> listarTodas() {
+        String sql = "SELECT id, descricao FROM tresponsavel ORDER BY descricao";
+        List<Responsavel> lista = new ArrayList<>();
+
+        try (Connection conn = Postgres.conectar();
+             PreparedStatement ps = (conn != null) ? conn.prepareStatement(sql) : null) {
+
+            if (conn == null || ps == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return lista;
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nome = rs.getString("nome");
+                    lista.add(new Responsavel(id, nome));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar Prioridades: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public boolean salvarResponsavel() {
+        String sql = "INSERT INTO tresponsavel (id, nome) VALUES (?, ?)";
+
+        try (Connection conn = Postgres.conectar();
+             PreparedStatement ps = (conn != null) ? conn.prepareStatement(sql) : null) {
+
+            if (conn == null || ps == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            ps.setInt(1, this.id);
+            ps.setString(2, this.nome);
+
+            int afetados = ps.executeUpdate();
+            return afetados > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir Responsável: " + e.getMessage());
+            return false;
+        }
     }
     public void alterarResponsavel() {
         System.out.println("Alterando responsavel: ID=" + this.id + ", Descrição=" + this.nome);

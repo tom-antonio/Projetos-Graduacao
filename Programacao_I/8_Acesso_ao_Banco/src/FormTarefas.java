@@ -44,7 +44,6 @@ public class FormTarefas extends JFrame {
         // Criar painel principal
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        String[] prioridade = { "Escolha uma Prioridade" };
         String[] responsavel = { "Escolha um Responsável" };
 
         // Configurações gerais do GridBagConstraints
@@ -94,7 +93,20 @@ public class FormTarefas extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        cmbPrioridade = new JComboBox<>(prioridade);
+        DefaultComboBoxModel<String> modeloPrioridade = new DefaultComboBoxModel<>();
+        modeloPrioridade.addElement("Escolha uma Prioridade");
+        try {
+            for (Prioridade p : Prioridade.listarTodas()) {
+                if (p != null && p.getDescricao() != null && !p.getDescricao().trim().isEmpty()) {
+                    modeloPrioridade.addElement(p.getDescricao());
+                }
+            }
+        } catch (Exception ex) {
+            // Mantém apenas a opção padrão caso falhe o carregamento
+            System.out.println("Não foi possível carregar prioridades: " + ex.getMessage());
+        }
+
+        cmbPrioridade = new JComboBox<>(modeloPrioridade);
         painelPrincipal.add(cmbPrioridade, gbc);
 
         // ComboBox Responsável
@@ -107,6 +119,19 @@ public class FormTarefas extends JFrame {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
+
+        DefaultComboBoxModel<String> modeloResponsavel = new DefaultComboBoxModel<>();
+        modeloResponsavel.addElement("Escolha um Responsável");
+        try {
+            for (Responsavel r : Responsavel.listarTodas()) {
+                if (r != null && r.getNome() != null && !r.getNome().trim().isEmpty()) {
+                    modeloResponsavel.addElement(r.getNome());
+                }
+            }
+        } catch (Exception ex) {
+            // Mantém apenas a opção padrão caso falhe o carregamento
+            System.out.println("Não foi possível carregar responsáveis: " + ex.getMessage());
+        }
 
         cmbResponsavel = new JComboBox<>(responsavel);
         painelPrincipal.add(cmbResponsavel, gbc);

@@ -6,7 +6,7 @@ public class App {
         "São Paulo");
     
         Veiculo v1 = new Veiculo();
-        v1.setId(01);
+        v1.setAno(01);
         v1.setPlaca("NFH-2314");
         v1.setName("Corsa");
         v1.setAno(2006);
@@ -14,7 +14,7 @@ public class App {
         v1.setFabricante(f1);
 
         Veiculo v2 = new Veiculo();
-        v2.setId(02);
+        v2.setAno(02);
         v2.setPlaca("NGK-5948");
         v2.setName("S10");
         v2.setAno(2012);

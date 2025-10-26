@@ -83,4 +83,20 @@ public class Veiculo {
     public void Pesquisar() {
         System.out.println("Pesquisado com sucesso!");
     }
+    public void setModelo(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setModelo'");
+    }
+    public void setFabricante(Fabricante f1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setFabricante'");
+    }
+    public void ImprimirVeiculo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'ImprimirVeiculo'");
+    }
+    public void setName(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setName'");
+    }
 }

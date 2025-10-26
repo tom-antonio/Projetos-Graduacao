@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build App (with JDBC)",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "javac",
+      "args": [
+        "-cp",
+        "lib/postgresql-42.6.0.jar:src",
+        "-d",
+        "bin",
+        "src/*.java"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run App (with JDBC)",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "java",
+      "args": [
+        "-cp",
+        "lib/postgresql-42.6.0.jar:bin",
+        "App"
+      ],
+      "dependsOn": ["Build App (with JDBC)"],
+      "problemMatcher": []
+    }
+  ]
+}

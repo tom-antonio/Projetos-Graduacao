@@ -40,7 +40,10 @@ public class FormPrioridade extends JFrame {
         // Campo ID
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
         painelPrincipal.add(new JLabel("ID:"), gbc);
+
 
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -70,18 +73,41 @@ public class FormPrioridade extends JFrame {
         btnPesquisar = new JButton("Pesquisar");
 
         // Método salvar ação do botão Salvar
-        btnSalvar.addActionListener(new ActionListener() {
+    btnSalvar.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    String idTexto = txtId.getText().trim();
                     String descricao = txtDescricao.getText().trim();
+
+                    if (idTexto.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormPrioridade.this,
+                                "ID não pode ser vazio.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        txtId.requestFocus();
+                        return;
+                    }
+
+                    int id;
+                    try {
+                        id = Integer.parseInt(idTexto);
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(FormPrioridade.this,
+                                "ID deve ser um número inteiro.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        txtId.requestFocus();
+                        return;
+                    }
 
                     if (descricao.isEmpty()) {
                         JOptionPane.showMessageDialog(FormPrioridade.this,
                                 "Descrição não pode ser vazia.",
                                 "Validação",
                                 JOptionPane.WARNING_MESSAGE);
+                        txtDescricao.requestFocus();
                         return;
                     }
 
@@ -89,6 +115,7 @@ public class FormPrioridade extends JFrame {
                         prioridade = new Prioridade();
                     }
 
+                    prioridade.setId(id);
                     prioridade.setDescricao(descricao);
 
                     boolean ok = prioridade.salvarPrioridade();
@@ -97,10 +124,11 @@ public class FormPrioridade extends JFrame {
                                 "Prioridade salva com sucesso!",
                                 "Sucesso",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        // Exibe o ID gerado pelo banco
-                        txtId.setText(String.valueOf(prioridade.getId()));
+                        // Mantém o ID informado e limpa apenas a descrição
                         txtDescricao.setText("");
                         txtDescricao.requestFocus();
+                        txtId.setText("");
+                        txtId.requestFocus();
                     } else {
                         JOptionPane.showMessageDialog(FormPrioridade.this,
                                 "Não foi possível salvar a prioridade. Verifique o log/console.",

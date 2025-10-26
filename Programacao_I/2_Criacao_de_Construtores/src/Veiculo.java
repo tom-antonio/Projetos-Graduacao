@@ -55,5 +55,4 @@ public class Veiculo {
         System.out.println("Cidade: " + this.getFabricante().getCidade());
         System.out.println("\n");
     }
-
 }

@@ -73,7 +73,68 @@ public class FormResponsavel extends JFrame {
         btnSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                responsavel.salvarResponsavel();
+                try {
+                    String idTexto = txtId.getText().trim();
+                    String nome = txtNome.getText().trim();
+
+                    if (idTexto.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormResponsavel.this,
+                                "ID não pode ser vazio.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        txtId.requestFocus();
+                        return;
+                    }
+
+                    int id;
+                    try {
+                        id = Integer.parseInt(idTexto);
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(FormResponsavel.this,
+                                "ID deve ser um número inteiro.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        txtId.requestFocus();
+                        return;
+                    }
+
+                    if (nome.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormResponsavel.this,
+                                "Nome não pode ser vazio.",
+                                "Validação",
+                                JOptionPane.WARNING_MESSAGE);
+                        txtNome.requestFocus();
+                        return;
+                    }
+
+                    if (responsavel == null) {
+                        responsavel = new Responsavel();
+                    }
+
+                    responsavel.setId(id);
+                    responsavel.setNome(nome);
+
+                    boolean ok = responsavel.salvarResponsavel();
+                    if (ok) {
+                        JOptionPane.showMessageDialog(FormResponsavel.this,
+                                "Responsável salvo com sucesso!",
+                                "Sucesso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        // Mantém o ID informado e limpa apenas o nome
+                        txtNome.setText("");
+                        txtNome.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(FormResponsavel.this,
+                                "Não foi possível salvar o responsável. Verifique o log/console.",
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Erro ao salvar: " + ex.getMessage(),
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
