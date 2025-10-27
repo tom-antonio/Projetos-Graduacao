@@ -1,4 +1,7 @@
-
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Tarefas {
@@ -69,8 +72,37 @@ public class Tarefas {
         this.responsavel = responsavel;
     }
 
-    public void salvarTarefas() {
-        System.out.println("Salvando tarefas: ID=" + this.id + ", Descrição=" + this.descricao_tarefa);
+    public boolean salvarTarefas() {
+        // Assumindo tabela 'ttarefas' com colunas compatíveis com os campos abaixo
+        final String SQL = "INSERT INTO tlista (id, data, descricao, observacao, fk_id_prioridade, fk_id_responsavel) VALUES (?, ?, ?, ?, ?, ?)";
+
+        if (this.prioridade == null || this.responsavel == null) {
+            System.out.println("Prioridade e Responsável devem ser informados.");
+            return false;
+        }
+
+        try (Connection conn = Postgres.conectar();
+             PreparedStatement ps = (conn != null) ? conn.prepareStatement(SQL) : null) {
+
+            if (conn == null || ps == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            ps.setInt(1, this.id);
+            ps.setDate(2, (this.data_tarefa != null ? Date.valueOf(this.data_tarefa) : null));
+            ps.setString(3, this.descricao_tarefa);
+            ps.setString(4, this.observacao);
+            ps.setInt(5, this.prioridade.getId());
+            ps.setInt(6, this.responsavel.getId());
+
+            int afetados = ps.executeUpdate();
+            return afetados > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir Tarefa: " + e.getMessage());
+            return false;
+        }
     }
     public void alterarTarefas() {
         System.out.println("Alterando prioridade: ID=" + this.id + ", Descrição=" + this.descricao_tarefa);
