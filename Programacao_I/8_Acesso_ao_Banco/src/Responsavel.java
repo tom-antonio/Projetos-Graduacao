@@ -33,9 +33,9 @@ public class Responsavel {
         this.nome = nome;
     }
 
-        // Lista todas as prioridades cadastradas no banco
+    // Lista todos os responsáveis cadastrados no banco
     public static List<Responsavel> listarTodas() {
-        String sql = "SELECT id, descricao FROM tresponsavel ORDER BY descricao";
+        String sql = "SELECT id, nome FROM tresponsavel ORDER BY nome";
         List<Responsavel> lista = new ArrayList<>();
 
         try (Connection conn = Postgres.conectar();
@@ -54,9 +54,14 @@ public class Responsavel {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao listar Prioridades: " + e.getMessage());
+            System.out.println("Erro ao listar Responsáveis: " + e.getMessage());
         }
         return lista;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 
     public boolean salvarResponsavel() {

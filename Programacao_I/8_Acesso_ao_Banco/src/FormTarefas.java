@@ -44,7 +44,6 @@ public class FormTarefas extends JFrame {
         // Criar painel principal
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        String[] responsavel = { "Escolha um Responsável" };
 
         // Configurações gerais do GridBagConstraints
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -133,7 +132,7 @@ public class FormTarefas extends JFrame {
             System.out.println("Não foi possível carregar responsáveis: " + ex.getMessage());
         }
 
-        cmbResponsavel = new JComboBox<>(responsavel);
+        cmbResponsavel = new JComboBox<>(modeloResponsavel);
         painelPrincipal.add(cmbResponsavel, gbc);
 
         // Campo Descricao
@@ -141,7 +140,7 @@ public class FormTarefas extends JFrame {
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        painelPrincipal.add(new JLabel("Descricão:"), gbc);
+        painelPrincipal.add(new JLabel("Descrição:"), gbc);
 
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;

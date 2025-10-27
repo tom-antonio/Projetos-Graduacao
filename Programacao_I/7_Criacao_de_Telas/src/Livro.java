@@ -191,4 +191,14 @@ public class Livro {
         System.out.println("Livro buscado com sucesso!");
     }
 
+    public void alterar() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alterar'");
+    }
+
+    public void pesquisar() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pesquisar'");
+    }
+
 }

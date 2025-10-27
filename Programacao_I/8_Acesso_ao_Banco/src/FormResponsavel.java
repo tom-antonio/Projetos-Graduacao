@@ -48,7 +48,7 @@ public class FormResponsavel extends JFrame {
         txtId = new JTextField(15);
         painelPrincipal.add(txtId, gbc);
 
-        // Campo Nome
+    // Campo Nome
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
@@ -60,6 +60,8 @@ public class FormResponsavel extends JFrame {
         gbc.weightx = 1.0;
         txtNome = new JTextField(15);
         painelPrincipal.add(txtNome, gbc);
+
+        // (Removido) Combo de seleção para manter a tela como FormPrioridade
 
         // Painel de botões
         JPanel painelBotoes = new JPanel(new FlowLayout());
@@ -166,7 +168,7 @@ public class FormResponsavel extends JFrame {
 
         // Adicionar painel de botões ao painel principal
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         painelPrincipal.add(painelBotoes, gbc);
