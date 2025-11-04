@@ -174,6 +174,11 @@ public class FormTarefas extends JFrame {
                             "Sucesso",
                             JOptionPane.INFORMATION_MESSAGE);
                     limparCamposAposSalvar();
+                }else {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Nenhum registro salvo. Verifique os dados informados.",
+                            "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             } catch (Exception ex) {
                 mostrarErro("salvar", ex);
@@ -214,6 +219,11 @@ public class FormTarefas extends JFrame {
                     // Limpar todos os campos após excluir
                     limparCamposAposSalvar();
                     txtId.requestFocus();
+                }else {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Nenhum registro excluído. Verifique se o ID existe.",
+                            "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             } catch (Exception ex) {
                 mostrarErro("excluir", ex);
