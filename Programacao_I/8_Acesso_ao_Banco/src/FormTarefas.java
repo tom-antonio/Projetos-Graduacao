@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -121,16 +119,11 @@ public class FormTarefas extends JFrame {
 
         DefaultComboBoxModel<String> modeloResponsavel = new DefaultComboBoxModel<>();
         modeloResponsavel.addElement("Escolha um Responsável");
-        try {
             for (Responsavel r : Responsavel.listarTodas()) {
                 if (r != null && r.getNome() != null && !r.getNome().trim().isEmpty()) {
                     modeloResponsavel.addElement(r.getNome());
                 }
             }
-        } catch (Exception ex) {
-            // Mantém apenas a opção padrão caso falhe o carregamento
-            System.out.println("Não foi possível carregar responsáveis: " + ex.getMessage());
-        }
 
         cmbResponsavel = new JComboBox<>(modeloResponsavel);
         painelPrincipal.add(cmbResponsavel, gbc);
@@ -161,7 +154,7 @@ public class FormTarefas extends JFrame {
         txtObservacoes = new JTextField(15);
         painelPrincipal.add(txtObservacoes, gbc);
 
-
+        
         // Painel de botões
         JPanel painelBotoes = new JPanel(new FlowLayout());
 
@@ -171,164 +164,76 @@ public class FormTarefas extends JFrame {
         btnPesquisar = new JButton("Pesquisar");
 
         // Adicionar listeners aos botões
-        btnSalvar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // ID
-                    String idTexto = txtId.getText().trim();
-                    if (idTexto.isEmpty()) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "ID não pode ser vazio.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtId.requestFocus();
-                        return;
-                    }
-                    int id;
-                    try {
-                        id = Integer.parseInt(idTexto);
-                    } catch (NumberFormatException nfe) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "ID deve ser um número inteiro.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtId.requestFocus();
-                        return;
-                    }
-
-                    // Data
-                    LocalDate data = getDataFromField();
-                    if (data == null) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Informe uma data válida no formato dd/MM/yyyy.",
-                                "Data inválida",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtData.requestFocus();
-                        return;
-                    }
-
-                    // Descrição
-                    String descricao = txtDescricao.getText().trim();
-                    if (descricao.isEmpty()) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Descrição não pode ser vazia.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtDescricao.requestFocus();
-                        return;
-                    }
-
-                    // Observações (opcional)
-                    String obs = txtObservacoes.getText();
-
-                    // Prioridade
-                    String selPrioridade = (String) cmbPrioridade.getSelectedItem();
-                    if (selPrioridade == null || selPrioridade.startsWith("Escolha")) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Selecione uma Prioridade.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        cmbPrioridade.requestFocus();
-                        return;
-                    }
-                    Prioridade prioridadeSel = null;
-                    for (Prioridade p : Prioridade.listarTodas()) {
-                        if (p != null && selPrioridade.equals(p.getDescricao())) {
-                            prioridadeSel = p;
-                            break;
-                        }
-                    }
-                    if (prioridadeSel == null) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Prioridade selecionada não encontrada no banco.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
-
-                    // Responsável
-                    String selResp = (String) cmbResponsavel.getSelectedItem();
-                    if (selResp == null || selResp.startsWith("Escolha")) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Selecione um Responsável.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        cmbResponsavel.requestFocus();
-                        return;
-                    }
-                    Responsavel responsavelSel = null;
-                    for (Responsavel r : Responsavel.listarTodas()) {
-                        if (r != null && selResp.equals(r.getNome())) {
-                            responsavelSel = r;
-                            break;
-                        }
-                    }
-                    if (responsavelSel == null) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Responsável selecionado não encontrado no banco.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
-
-                    if (tarefas == null) {
-                        tarefas = new Tarefas();
-                    }
-                    tarefas.setId(id);
-                    tarefas.setData_tarefa(data);
-                    tarefas.setDescricao_tarefa(descricao);
-                    tarefas.setObservacao(obs);
-                    tarefas.setPrioridade(prioridadeSel);
-                    tarefas.setResponsavel(responsavelSel);
-
-                    boolean ok = tarefas.salvarTarefas();
-                    if (ok) {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Tarefa salva com sucesso!",
-                                "Sucesso",
-                                JOptionPane.INFORMATION_MESSAGE);
-
-                        txtId.setText("");
-                        txtData.setText("");
-                        txtDescricao.setText("");
-                        txtObservacoes.setText("");
-                        cmbPrioridade.setSelectedIndex(0);
-                        cmbResponsavel.setSelectedIndex(0);
-                        txtDescricao.requestFocus();
-                    } else {
-                        JOptionPane.showMessageDialog(FormTarefas.this,
-                                "Não foi possível salvar a tarefa. Verifique o log/console.",
-                                "Erro",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception ex) {
+        btnSalvar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(true)) return;
+                boolean ok = tarefas.salvarTarefas();
+                if (ok) {
                     JOptionPane.showMessageDialog(FormTarefas.this,
-                            "Erro ao salvar: " + ex.getMessage(),
-                            "Erro",
-                            JOptionPane.ERROR_MESSAGE);
+                            "Tarefa salva com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    limparCamposAposSalvar();
                 }
+            } catch (Exception ex) {
+                mostrarErro("salvar", ex);
             }
         });
 
-        btnAlterar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tarefas.alterarTarefas();
+        btnAlterar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(true)) return;
+                boolean ok = tarefas.alterarTarefas();
+                if (ok) {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Tarefa alterada com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    // Limpar todos os campos após alterar
+                    limparCamposAposSalvar();
+                } else {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Nenhum registro alterado. Verifique se o ID existe.",
+                            "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (Exception ex) {
+                mostrarErro("alterar", ex);
             }
         });
 
-        btnExcluir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tarefas.excluirTarefas();
+        btnExcluir.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(false)) return;
+                boolean ok = tarefas.excluirTarefas();
+                if (ok) {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Tarefa excluída com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    // Limpar todos os campos após excluir
+                    limparCamposAposSalvar();
+                    txtId.requestFocus();
+                }
+            } catch (Exception ex) {
+                mostrarErro("excluir", ex);
             }
         });
 
-        btnPesquisar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tarefas.pesquisarTarefas();
+        btnPesquisar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(false)) return;
+                boolean ok = tarefas.pesquisarTarefas();
+                if (ok) {
+                    preencherCamposAPartirDoModelo();
+                } else {
+                    JOptionPane.showMessageDialog(FormTarefas.this,
+                            "Tarefa não encontrada.",
+                            "Pesquisa",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception ex) {
+                mostrarErro("pesquisar", ex);
             }
         });
 
@@ -348,15 +253,6 @@ public class FormTarefas extends JFrame {
         add(painelPrincipal);
     }
 
-    // Formata e coloca a data no campo (útil ao carregar registros)
-    private void setDataField(LocalDate data) {
-        if (data == null) {
-            txtData.setText("");
-        } else {
-            txtData.setText(data.format(dateFormatter));
-        }
-    }
-
     // Lê o campo e converte para LocalDate; retorna null se vazio ou inválido
     private LocalDate getDataFromField() {
         String texto = txtData.getText();
@@ -371,5 +267,161 @@ public class FormTarefas extends JFrame {
         } catch (DateTimeParseException ex) {
             return null;
         }
+    }
+
+    // Validação reutilizável do ID (para salvar/excluir)
+    private Integer obterIdValido() {
+        String idTexto = txtId.getText().trim();
+        if (idTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "ID não pode ser vazio.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtId.requestFocus();
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(idTexto);
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "ID deve ser um número inteiro.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtId.requestFocus();
+            return null;
+        }
+    }
+
+    // Valida e devolve a descrição
+    private String obterDescricaoValida() {
+        String descricao = txtDescricao.getText().trim();
+        if (descricao.isEmpty()) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "Descrição não pode ser vazia.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtDescricao.requestFocus();
+            return null;
+        }
+        return descricao;
+    }
+
+    private Tarefas getOrCreateModel() {
+        if (tarefas == null) {
+            tarefas = new Tarefas();
+        }
+        return tarefas;
+    }
+
+    private Prioridade resolverPrioridadeSelecionada() {
+        String sel = (String) cmbPrioridade.getSelectedItem();
+        if (sel == null || sel.startsWith("Escolha")) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "Selecione uma Prioridade.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            cmbPrioridade.requestFocus();
+            return null;
+        }
+        for (Prioridade p : Prioridade.listarTodas()) {
+            if (p != null && sel.equals(p.getDescricao())) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private Responsavel resolverResponsavelSelecionado() {
+        String sel = (String) cmbResponsavel.getSelectedItem();
+        if (sel == null || sel.startsWith("Escolha")) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "Selecione um Responsável.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            cmbResponsavel.requestFocus();
+            return null;
+        }
+        for (Responsavel r : Responsavel.listarTodas()) {
+            if (r != null && sel.equals(r.getNome())) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    // Centraliza validações e preenche o modelo. Quando completo=true, valida e preenche todos os campos.
+    private boolean preencherModeloComValidacoes(boolean completo) {
+        Integer id = obterIdValido();
+        if (id == null) return false;
+
+        Tarefas t = getOrCreateModel();
+        t.setId(id);
+
+        if (!completo) return true;
+
+        LocalDate data = getDataFromField();
+        if (data == null) {
+            JOptionPane.showMessageDialog(FormTarefas.this,
+                    "Informe uma data válida no formato dd/MM/yyyy.",
+                    "Data inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            txtData.requestFocus();
+            return false;
+        }
+
+        String descricao = obterDescricaoValida();
+        if (descricao == null) return false;
+
+        String obs = txtObservacoes.getText();
+
+        Prioridade p = resolverPrioridadeSelecionada();
+        if (p == null) return false;
+        Responsavel r = resolverResponsavelSelecionado();
+        if (r == null) return false;
+
+        t.setData_tarefa(data);
+        t.setDescricao_tarefa(descricao);
+        t.setObservacao(obs);
+        t.setPrioridade(p);
+        t.setResponsavel(r);
+        return true;
+    }
+
+    private void preencherCamposAPartirDoModelo() {
+        LocalDate data = tarefas.getData_tarefa();
+        if (data != null) {
+            txtData.setText(data.format(dateFormatter));
+        } else {
+            txtData.setText("");
+        }
+        txtDescricao.setText(tarefas.getDescricao_tarefa() != null ? tarefas.getDescricao_tarefa() : "");
+        txtObservacoes.setText(tarefas.getObservacao() != null ? tarefas.getObservacao() : "");
+
+        Prioridade p = tarefas.getPrioridade();
+        if (p != null && p.getDescricao() != null) {
+            cmbPrioridade.setSelectedItem(p.getDescricao());
+        }
+        Responsavel r = tarefas.getResponsavel();
+        if (r != null && r.getNome() != null) {
+            cmbResponsavel.setSelectedItem(r.getNome());
+        }
+    }
+
+    private void mostrarErro(String acao, Exception ex) {
+        JOptionPane.showMessageDialog(FormTarefas.this,
+                "Erro ao " + acao + ": " + ex.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void limparCamposAposSalvar() {
+        txtId.setText("");
+        txtData.setText("");
+        txtDescricao.setText("");
+        txtObservacoes.setText("");
+        cmbPrioridade.setSelectedIndex(0);
+        cmbResponsavel.setSelectedIndex(0);
+        txtId.requestFocus();
     }
 }

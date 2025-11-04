@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class FormResponsavel extends JFrame {
@@ -72,92 +70,80 @@ public class FormResponsavel extends JFrame {
         btnPesquisar = new JButton("Pesquisar");
 
         // Adicionar listeners aos botões
-        btnSalvar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String idTexto = txtId.getText().trim();
-                    String nome = txtNome.getText().trim();
-
-                    if (idTexto.isEmpty()) {
-                        JOptionPane.showMessageDialog(FormResponsavel.this,
-                                "ID não pode ser vazio.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtId.requestFocus();
-                        return;
-                    }
-
-                    int id;
-                    try {
-                        id = Integer.parseInt(idTexto);
-                    } catch (NumberFormatException nfe) {
-                        JOptionPane.showMessageDialog(FormResponsavel.this,
-                                "ID deve ser um número inteiro.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtId.requestFocus();
-                        return;
-                    }
-
-                    if (nome.isEmpty()) {
-                        JOptionPane.showMessageDialog(FormResponsavel.this,
-                                "Nome não pode ser vazio.",
-                                "Validação",
-                                JOptionPane.WARNING_MESSAGE);
-                        txtNome.requestFocus();
-                        return;
-                    }
-
-                    if (responsavel == null) {
-                        responsavel = new Responsavel();
-                    }
-
-                    responsavel.setId(id);
-                    responsavel.setNome(nome);
-
-                    boolean ok = responsavel.salvarResponsavel();
-                    if (ok) {
-                        JOptionPane.showMessageDialog(FormResponsavel.this,
-                                "Responsável salvo com sucesso!",
-                                "Sucesso",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        // Mantém o ID informado e limpa apenas o nome
-                        txtNome.setText("");
-                        txtNome.requestFocus();
-                    } else {
-                        JOptionPane.showMessageDialog(FormResponsavel.this,
-                                "Não foi possível salvar o responsável. Verifique o log/console.",
-                                "Erro",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception ex) {
+        btnSalvar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(true)) return;
+                boolean ok = responsavel.salvarResponsavel();
+                if (ok) {
                     JOptionPane.showMessageDialog(FormResponsavel.this,
-                            "Erro ao salvar: " + ex.getMessage(),
+                            "Responsável salvo com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    // Padronização: limpar todos os campos após salvar
+                    limparCampos();
+                } else {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Não foi possível salvar o responsável. Verifique o log/console.",
                             "Erro",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (Exception ex) {
+                mostrarErro("salvar", ex);
             }
         });
 
-        btnAlterar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
+        btnAlterar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(true)) return;
+                boolean ok = responsavel.alterarResponsavel();
+                if (ok) {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Responsável alterado com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    limparCampos();
+                }
+            } catch (Exception ex) {
+                mostrarErro("alterar", ex);
             }
         });
 
-        btnExcluir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                responsavel.excluirResponsavel();
+        btnExcluir.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(false)) return;
+                boolean ok = responsavel.excluirResponsavel();
+                if (ok) {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Responsável excluído com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    limparCampos();
+                } else {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Não foi possível excluir o responsável. Verifique o log/console.",
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                mostrarErro("excluir", ex);
             }
         });
 
-        btnPesquisar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                responsavel.pesquisarResponsavel();
+        btnPesquisar.addActionListener(e -> {
+            try {
+                if (!preencherModeloComValidacoes(false)) return;
+                boolean ok = responsavel.pesquisarResponsavel();
+                if (ok) {
+                    txtNome.setText(responsavel.getNome());
+                } else {
+                    JOptionPane.showMessageDialog(FormResponsavel.this,
+                            "Responsável não encontrado.",
+                            "Pesquisa",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    txtNome.setText("");
+                }
+            } catch (Exception ex) {
+                mostrarErro("pesquisar", ex);
             }
         });
 
@@ -175,5 +161,83 @@ public class FormResponsavel extends JFrame {
 
         // Adicionar painel principal à janela
         add(painelPrincipal);
+    }
+
+    // Validação reutilizável do ID para salvar/excluir
+    private Integer obterIdValido() {
+        String idTexto = txtId.getText().trim();
+        if (idTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(FormResponsavel.this,
+                    "ID não pode ser vazio.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtId.requestFocus();
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(idTexto);
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(FormResponsavel.this,
+                    "ID deve ser um número inteiro.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtId.requestFocus();
+            return null;
+        }
+    }
+
+    // Validação reutilizável do Nome
+    private String obterNomeValido() {
+        String nome = txtNome.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(FormResponsavel.this,
+                    "Nome não pode ser vazio.",
+                    "Validação",
+                    JOptionPane.WARNING_MESSAGE);
+            txtNome.requestFocus();
+            return null;
+        }
+        return nome;
+    }
+
+    // Garante que o modelo existe
+    private Responsavel getOrCreateModel() {
+        if (responsavel == null) {
+            responsavel = new Responsavel();
+        }
+        return responsavel;
+    }
+
+    // Centraliza validações e preenchimento do modelo: sempre ID; nome quando necessário
+    private boolean preencherModeloComValidacoes(boolean precisaNome) {
+        Integer id = obterIdValido();
+        if (id == null) return false;
+
+        String nome = null;
+        if (precisaNome) {
+            nome = obterNomeValido();
+            if (nome == null) return false;
+        }
+
+        Responsavel r = getOrCreateModel();
+        r.setId(id);
+        if (nome != null) {
+            r.setNome(nome);
+        }
+        return true;
+    }
+
+    private void mostrarErro(String acao, Exception ex) {
+        JOptionPane.showMessageDialog(FormResponsavel.this,
+                "Erro ao " + acao + ": " + ex.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void limparCampos() {
+        txtId.setText("");
+        txtNome.setText("");
+        txtId.requestFocus();
     }
 }

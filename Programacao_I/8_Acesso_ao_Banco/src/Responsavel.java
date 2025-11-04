@@ -64,35 +64,76 @@ public class Responsavel {
         return nome;
     }
 
-    public boolean salvarResponsavel() {
-        String sql = "INSERT INTO tresponsavel (id, nome) VALUES (?, ?)";
+    public boolean salvarResponsavel() throws SQLException {
+        final String sql = "INSERT INTO tresponsavel (id, nome) VALUES (?, ?)";
 
-        try (Connection conn = Postgres.conectar();
-             PreparedStatement ps = (conn != null) ? conn.prepareStatement(sql) : null) {
-
-            if (conn == null || ps == null) {
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
                 System.out.println("Falha na conexão com o banco de dados.");
                 return false;
             }
 
-            ps.setInt(1, this.id);
-            ps.setString(2, this.nome);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                ps.setString(2, this.nome);
 
-            int afetados = ps.executeUpdate();
-            return afetados > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Erro ao inserir Responsável: " + e.getMessage());
-            return false;
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
         }
     }
-    public void alterarResponsavel() {
-        System.out.println("Alterando responsavel: ID=" + this.id + ", Descrição=" + this.nome);
+    public boolean alterarResponsavel() throws SQLException {
+        final String sql = "UPDATE tresponsavel SET nome = ? WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, this.nome);
+                ps.setInt(2, this.id);
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
+        }
     }
-    public void excluirResponsavel() {
-        System.out.println("Excluindo responsavel: ID=" + this.id + ", Descrição=" + this.nome);
+    public boolean excluirResponsavel() throws SQLException {
+        final String sql = "DELETE FROM tresponsavel WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
+        }
     }
-    public void pesquisarResponsavel() {
-        System.out.println("Pesquisando responsavel: ID=" + this.id + ", Descrição=" + this.nome);
+    public boolean pesquisarResponsavel() throws SQLException {
+        final String sql = "SELECT nome FROM tresponsavel WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        this.nome = rs.getString("nome");
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
     }
 }

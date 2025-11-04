@@ -39,27 +39,22 @@ public class Prioridade {
         return descricao;
     }
 
-    public boolean salvarPrioridade() {
-        String sql = "INSERT INTO tprioridade (id, descricao) VALUES (?, ?)";
+    public boolean salvarPrioridade() throws SQLException {
+        final String sql = "INSERT INTO tprioridade (id, descricao) VALUES (?, ?)";
 
-        try (Connection conn = Postgres.conectar();
-             PreparedStatement ps = (conn != null) ? conn.prepareStatement(sql) : null) {
-
-            if (conn == null || ps == null) {
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
                 System.out.println("Falha na conexão com o banco de dados.");
                 return false;
             }
 
-            ps.setInt(1, this.id);
-            ps.setString(2, this.descricao);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                ps.setString(2, this.descricao);
 
-            int afetados = ps.executeUpdate();
-            return afetados > 0;
-
-        } catch (SQLException e) {
-            // Trate chaves duplicadas, violação de constraints, etc.
-            System.out.println("Erro ao inserir Prioridade: " + e.getMessage());
-            return false;
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
         }
     }
 
@@ -89,14 +84,60 @@ public class Prioridade {
 
         return lista;
     }
-    public void alterarPrioridade() {
-        System.out.println("Alterando prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    public boolean alterarPrioridade() throws SQLException {
+        final String sql = "UPDATE tprioridade SET descricao = ? WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, this.descricao);
+                ps.setInt(2, this.id);
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
+        }
     }
-    public void excluirPrioridade() {
-        System.out.println("Excluindo prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    public boolean excluirPrioridade() throws SQLException {
+        final String sql = "DELETE FROM tprioridade WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                int afetados = ps.executeUpdate();
+                return afetados > 0;
+            }
+        }
     }
-    public void pesquisarPrioridade() {
-        System.out.println("Pesquisando prioridade: ID=" + this.id + ", Descrição=" + this.descricao);
+    // Busca por ID e preenche os campos do próprio objeto
+    public boolean pesquisarPrioridade() throws SQLException {
+        final String sql = "SELECT descricao FROM tprioridade WHERE id = ?";
+
+        try (Connection conn = Postgres.conectar()) {
+            if (conn == null) {
+                System.out.println("Falha na conexão com o banco de dados.");
+                return false;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, this.id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        this.descricao = rs.getString("descricao");
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
     }
     
 }
