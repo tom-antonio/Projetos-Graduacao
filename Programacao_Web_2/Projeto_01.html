@@ -1,0 +1,41 @@
+<!DOCTYPE html> <!-- Comando necessário para informar ao navegador que o documento é do tipo HTML5.-->
+<html lang="pt-br"> <!-- A tag <html> é a raiz do documento HTML e envolve todo o conteúdo da página.-->
+<head> <!-- A tag <head> contém informações sobre o cabeçalho do documento, como metadados, links para arquivos externos, etc.-->
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres do documento como UTF-8, que é uma codificação amplamente utilizada para suportar caracteres de várias línguas.-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define a configuração de visualização para dispositivos móveis, garantindo que a página seja exibida corretamente em diferentes tamanhos de tela.-->
+    <title>Projeto 01_HTML</title> <!-- Define o título da página, que é exibido na aba do navegador e nos resultados de pesquisa.-->
+
+</head>
+<body>
+
+</body>
+    <header> <!-- A tag <header> é usada para definir o cabeçalho de uma seção ou do documento inteiro.-->
+        <h1>Programação WEB II</h1> <!-- A tag <h1> é usada para definir o título principal da página, indicando o assunto ou tema principal.-->
+    </header>
+
+    <main> <!-- A tag <main> é usada para envolver o conteúdo principal da página, que é o conteúdo mais importante e relevante para os visitantes.-->
+        <h2>Meus Hobbies Favoritos</h2> <!-- A tag <h2> é usada para definir um subtítulo ou título secundário, indicando uma seção específica dentro do conteúdo principal.-->
+        <ul> <!-- A tag <ul> é usada para criar uma lista não ordenada, onde cada item da lista é representado por uma tag <li>.-->
+            <li>Fazer trilhas</li> <!-- A tag <li> é usada para definir um item de lista dentro de uma lista ordenada ou não ordenada.-->
+            <li>Praticar natação</li>
+            <li>Viajar</li>
+            <li>Montar quebra-cabeça</li>
+        </ul>
+        <hr>
+        <h2>Entre em Contato</h2>
+        <form action="#" method="POST"> <!-- A tag <form> é usada para criar um formulário que permite aos usuários enviar dados para o servidor. O atributo "action" especifica a URL para onde os dados do formulário serão enviados, e o atributo "method" define o método HTTP a ser usado (neste caso, POST).-->
+            <label for="nome">Nome:</label> <!-- A tag <label> é usada para associar um rótulo a um elemento de formulário, melhorando a acessibilidade. O atributo "for" deve corresponder ao id do elemento de formulário associado.-->
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo:" required> <!-- A tag <input> é usada para criar um campo de entrada onde os usuários podem digitar informações. O atributo "type" define o tipo de entrada (neste caso, texto), "id" é usado para associar o campo ao rótulo, "name" é o nome do campo que será enviado ao servidor, "placeholder" fornece um texto de dica dentro do campo, e "required" torna o campo obrigatório.-->
+            <br><br> <!-- A tag <br> é usada para inserir uma quebra de linha, permitindo que o conteúdo seja exibido em uma nova linha.-->
+            <label for="email">Mensagem:</label>
+            <textarea id="email" name="email" placeholder="Como posso te ajudar?" required></textarea> <!-- A tag <textarea> é usada para criar um campo de texto multilinha, permitindo que os usuários digitem mensagens mais longas. Os atributos "id", "name", "placeholder" e "required" têm funções semelhantes aos do elemento <input>.-->
+            <br><br>
+            <button type="submit">Enviar</button> <!-- A tag <button> é usada para criar um botão clicável. O atributo "type" define o tipo do botão (neste caso, submit), que envia os dados do formulário quando clicado.-->
+        </form>
+    </main>
+
+    <footer> <!-- A tag <footer> é usada para definir o rodapé de uma seção ou do documento inteiro, geralmente contendo informações de contato, direitos autorais, etc.-->
+        <p>&copy; 2026 Desenvolvido na aula de WEB II.</p> <!-- A tag <p> é usada para definir um parágrafo de texto. O símbolo &copy; é uma entidade HTML que representa o símbolo de copyright.-->
+
+</body>
+</html>
